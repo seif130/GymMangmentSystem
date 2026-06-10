@@ -6,7 +6,7 @@ namespace GymManagmet.DAL.Models
 {
     public class Member : GymUser
     {
-        public string Photo { get; set; } = default!;
+        public string? Photo { get; set; }
 
 
         #region Relationships

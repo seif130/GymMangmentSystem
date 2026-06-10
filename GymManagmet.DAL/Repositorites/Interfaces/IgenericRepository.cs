@@ -2,6 +2,7 @@
 using GymManagmet.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace GymManagmet.DAL.Repositorites.Interfaces
@@ -16,5 +17,9 @@ namespace GymManagmet.DAL.Repositorites.Interfaces
         Task<int> UpdateAsync(TEntity entity, CancellationToken ct = default);
 
         Task<int> DeleteAsync(TEntity entity, CancellationToken ct = default);
+
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate , CancellationToken ct = default);
+
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = false, CancellationToken ct = default);
     }
 }

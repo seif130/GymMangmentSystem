@@ -6,6 +6,7 @@ using GymManagmet.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq.Expressions;
 
 namespace GymManagmet.DAL.Repositorites.Classes
 {
@@ -27,13 +28,22 @@ namespace GymManagmet.DAL.Repositorites.Classes
             return await dbContext.SaveChangesAsync(ct);
         }
 
+        public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default)
+        {
+           return dbSet.AsNoTracking().AnyAsync(predicate, ct);
+        }
+
         public async Task<int> DeleteAsync(TEntity entity, CancellationToken ct = default)
         {
             dbSet.Remove(entity);
             return await dbContext.SaveChangesAsync(ct);
         }
 
-
+        public Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = false, CancellationToken ct = default)
+        {
+           IQueryable<TEntity> query = tracking ? dbSet : dbSet.AsNoTracking();
+           return query.FirstOrDefaultAsync(predicate, ct);
+        }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(bool tracking = false, CancellationToken ct = default)
         {
