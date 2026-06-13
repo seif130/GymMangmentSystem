@@ -25,6 +25,13 @@ namespace GymMangmentSystem
             } );
             builder.Services.AddScoped(typeof(IgenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<ImemberService , MemberService>();
+            builder.Services.AddScoped<IPlanServices, PlanService>();
+            builder.Services.AddScoped<ITrainerService, TrainerService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
