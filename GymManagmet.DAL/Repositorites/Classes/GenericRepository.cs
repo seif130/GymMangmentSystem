@@ -45,9 +45,10 @@ namespace GymManagmet.DAL.Repositorites.Classes
            return query.FirstOrDefaultAsync(predicate, ct);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(bool tracking = false, CancellationToken ct = default)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, bool tracking = false, CancellationToken ct = default)
         {
             IQueryable<TEntity> query = tracking ? dbSet : dbSet.AsNoTracking();
+            if (predicate is not null) query = query.Where(predicate);
             return await query.ToListAsync(ct);
         }
 

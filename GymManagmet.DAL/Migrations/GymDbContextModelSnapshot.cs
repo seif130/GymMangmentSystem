@@ -78,31 +78,25 @@ namespace GymManagmet.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryName = "Cardio",
+                            CategoryName = "GeneralFitness",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            CategoryName = "Strength",
+                            CategoryName = "Yoga",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            CategoryName = "Flexibility",
+                            CategoryName = "Boxing",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
-                            CategoryName = "Balance",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryName = "Endurance",
+                            CategoryName = "CrossFit",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

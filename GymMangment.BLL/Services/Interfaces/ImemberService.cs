@@ -1,4 +1,5 @@
-﻿using GymMangment.BLL.ViewModels.MemberViewModels;
+﻿using GymMangment.BLL.Common;
+using GymMangment.BLL.ViewModels.MemberViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace GymMangment.BLL.Services.Interfaces
     {
         Task<IEnumerable<MemberViewModel>> GetAllMembersAsync(CancellationToken ct = default);
 
-        Task<bool>  CreateMemberAsync(CreateMemberViewModel model, CancellationToken ct = default);
+        Task<Result> CreateMemberAsync(CreateMemberViewModel model, CancellationToken ct = default);
 
         Task<MemberViewModel?> GetMemberDetailsByIdAsync (int MemberId, CancellationToken ct = default);
 
@@ -17,8 +18,8 @@ namespace GymMangment.BLL.Services.Interfaces
 
         Task<MemberToUpdateViewModel?> GetMemberToUpdateAsync (int memberId, CancellationToken ct = default);
 
-        Task<bool> UpdateMemberAsync(int id, MemberToUpdateViewModel model, CancellationToken ct = default);
+        Task<Result> UpdateMemberAsync(int id, MemberToUpdateViewModel model, CancellationToken ct = default);
 
-        public Task<bool> DeleteMemberAsync(int id, CancellationToken ct = default);
+        public Task<Result> DeleteMemberAsync(int id, CancellationToken ct = default);
     }
 }

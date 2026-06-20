@@ -1,4 +1,5 @@
-﻿using GymMangment.BLL.Services.Interfaces;
+﻿using GymMangment.BLL.Services.classes;
+using GymMangment.BLL.Services.Interfaces;
 using GymMangment.BLL.ViewModels.MemberViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,9 +8,12 @@ namespace GymMangment.PL.Controllers
     public class MembersController : Controller
     {
         private readonly ImemberService _memberService;
-        public MembersController(ImemberService memberService)
+        private readonly IAttachmentService _AttachmentService;
+        public MembersController(ImemberService memberService , IAttachmentService attachmentService)
         {
             _memberService = memberService;
+            _AttachmentService = attachmentService;
+
         }
 
 
@@ -58,8 +62,10 @@ namespace GymMangment.PL.Controllers
 
             var result = await _memberService.CreateMemberAsync(model, ct);
 
-            if (result) TempData["SuccessMessage"] = "Member created successfully.";
-            else TempData["ErrorMessage"] = "Failed to create member.";
+            if (result.success)
+                TempData["SuccessMessage"] = "Member created successfully.";
+            else
+                TempData["ErrorMessage"] = result.error;
             return RedirectToAction(nameof(Index));
         }
 
@@ -85,9 +91,14 @@ namespace GymMangment.PL.Controllers
             if (!ModelState.IsValid) return View(nameof(EditMember), model);
             var result = await _memberService.UpdateMemberAsync(id, model, ct);
 
-            if (result) TempData["SuccessMessage"] = "Member updated successfully.";
-            else TempData["ErrorMessage"] = "Failed to update member.";
-            return RedirectToAction(nameof(Index));
+            if (result.success)
+            {
+                TempData["SuccessMessage"] = "Member updated successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["ErrorMessage"] = result.error;
+            return View(model);
         }
 
         #endregion
@@ -109,14 +120,33 @@ namespace GymMangment.PL.Controllers
         public async Task<IActionResult> DeleteConfirmed([FromRoute] int id, CancellationToken ct)
         {
             var result = await _memberService.DeleteMemberAsync(id, ct);
-            if (result) TempData["SuccessMessage"] = "Member deleted successfully.";
-            else TempData["ErrorMessage"] = "Failed to delete member.";
-            return RedirectToAction(nameof(Index));
+            if (result.success)
+            {
+                TempData["SuccessMessage"] = "Session Deleted";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.error;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
 
         #endregion
+        [HttpGet]
+
+        public async Task<IActionResult> Picture(int id)
+        {
+            var member = await _memberService.GetMemberDetailsByIdAsync(id);
+            if (member is null || string.IsNullOrEmpty(member.Photo))
+                return NotFound();
 
 
+            var result = _AttachmentService.GetFile(member.Photo, "MembersPictures");
+            if (result is null) return NotFound();
+
+            return File(result.Value.Stream, result.Value.ContentType);
+        }
     }
 }

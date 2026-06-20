@@ -28,13 +28,12 @@ namespace GymMangment.PL.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var result = await _trainerService.CreateTrainerAsync(model, ct);
-            if (result)
-            { 
+            if (result.success)
+            {
                 TempData["SuccessMessage"] = "Trainer created successfully.";
                 return RedirectToAction(nameof(Index));
             }
-
-            TempData["ErrorMessage"] = "Trainer Failed to create";
+            TempData["ErrorMessage"] = result.error;
             return View(model);
         }
 
@@ -72,12 +71,13 @@ namespace GymMangment.PL.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var result = await _trainerService.UpdateTrainerDetailsAsync(id, model, ct);
-            if (result)
+            if (result.success)
+            {
                 TempData["SuccessMessage"] = "Trainer updated successfully.";
-            else
-                TempData["ErrorMessage"] = "Trainer Failed to update";
-
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["ErrorMessage"] = result.error;
+            return View(model);
         }
 
         #endregion
@@ -100,12 +100,16 @@ namespace GymMangment.PL.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken ct)
         {
             var result = await _trainerService.RemoveTrainerAsync(id, ct);
-            if (result)
-                TempData["SucessMessage"] = "Trainer deleted Successfully";
+            if (result.success)
+            {
+                TempData["SuccessMessage"] = "Session Deleted";
+                return RedirectToAction(nameof(Index));
+            }
             else
-                TempData["ErrorMessaage"] = "failed to delete Trainer";
-
-            return RedirectToAction(nameof(Index));
+            {
+                TempData["ErrorMessage"] = result.error;
+                return RedirectToAction(nameof(Index));
+            }
 
         }
 

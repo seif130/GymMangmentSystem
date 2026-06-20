@@ -2,15 +2,17 @@ using GymManagmet.DAL.Repositorites.Classes;
 using GymManagmet.DAL.Repositorites.Interfaces;
 using GymManagmet.DbContexts;
 using GymManagmet.Models;
+using GymMangment.BLL;
 using GymMangment.BLL.Services.classes;
 using GymMangment.BLL.Services.Interfaces;
+using GymMangment.PL;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymMangmentSystem
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +32,17 @@ namespace GymMangmentSystem
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+            builder.Services.AddScoped<IMembershipService, MembershipService>();
+            builder.Services.AddScoped<IBookingRepository , BookingRepository>();
+            builder.Services.AddScoped<IbokkingService, BokkingService>();
+            builder.Services.AddScoped<IAttachmentService , AttachmentService>();
+            builder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfile()));
 
 
             var app = builder.Build();
+
+            await app.MigrateAndSeedAsync();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

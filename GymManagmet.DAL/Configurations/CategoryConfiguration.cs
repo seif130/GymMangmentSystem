@@ -15,11 +15,12 @@ namespace GymManagmet.DAL.Configurations
 
             builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
 
-            builder.HasData(new Category {  Id = 1, CategoryName = "Cardio"  },
-                new Category  {   Id = 2,   CategoryName = "Strength" },
-                new Category   {  Id = 3,  CategoryName = "Flexibility" },
-                new Category  {Id = 4,   CategoryName = "Balance" },
-                new Category  {Id = 5,   CategoryName = "Endurance" });
+            builder.HasData(new Category { Id = 1, CategoryName = "GeneralFitness" },
+                new Category { Id = 2, CategoryName = "Yoga" },
+                new Category { Id = 3, CategoryName = "Boxing" },
+                new Category { Id = 4, CategoryName = "CrossFit" });
+
+            
         }
     }
 }

@@ -54,13 +54,15 @@ namespace GymMangmentSystem.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var result = await _planService.UpdatePlanAsync(id, model, ct);
-            if (result)
+            if (result.success)
+            {
                 TempData["SuccessMessage"] = "Plan updated successfully.";
-            else 
-                TempData["ErrorMessage"] = "Failed to update plan. It may be inactive or have active memberships.";
-            return RedirectToAction(nameof(Index));
-            
-          
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["ErrorMessage"] = result.error;
+            return View(model);
+
+
         }
 
         #endregion
@@ -71,11 +73,16 @@ namespace GymMangmentSystem.Controllers
             public async Task<IActionResult> Activate(int id, CancellationToken ct)
             {
                 var result = await _planService.ToggleActivationAsync(id, ct);
-               if(result)
-                TempData["SuccessMessage"] = "Plan activation status toggled successfully.";
+            if (result.success)
+            {
+                TempData["SuccessMessage"] = "Session Deleted";
+                return RedirectToAction(nameof(Index));
+            }
             else
-                TempData["ErrorMessage"] = "Failed to toggle plan activation. It may have active memberships.";
-            return RedirectToAction(nameof(Index));
+            {
+                TempData["ErrorMessage"] = result.error;
+                return RedirectToAction(nameof(Index));
+            }
         }
         }
     }
