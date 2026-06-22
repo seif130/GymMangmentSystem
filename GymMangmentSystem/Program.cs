@@ -1,3 +1,4 @@
+using GymManagmet.DAL.Models;
 using GymManagmet.DAL.Repositorites.Classes;
 using GymManagmet.DAL.Repositorites.Interfaces;
 using GymManagmet.DbContexts;
@@ -6,6 +7,7 @@ using GymMangment.BLL;
 using GymMangment.BLL.Services.classes;
 using GymMangment.BLL.Services.Interfaces;
 using GymMangment.PL;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymMangmentSystem
@@ -37,6 +39,22 @@ namespace GymMangmentSystem
             builder.Services.AddScoped<IBookingRepository , BookingRepository>();
             builder.Services.AddScoped<IbokkingService, BokkingService>();
             builder.Services.AddScoped<IAttachmentService , AttachmentService>();
+            builder.Services.AddIdentity<ApplicationUser , IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+                config.Lockout.MaxFailedAccessAttempts = 5;
+            }).AddEntityFrameworkStores<GymDbContext>();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+               
+                //options.LoginPath = "/Account/Login";
+          
+                //options.AccessDeniedPath = "/Account/AccessDenied";
+            });
+
+
             builder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfile()));
 
 
@@ -54,13 +72,13 @@ namespace GymMangmentSystem
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Account}/{action=Login}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
